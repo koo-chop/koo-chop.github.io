@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>悪魔狂信者タイプ診断 | 深淵の性格診断ゲーム</title>
+  <meta name="description" content="簡単な質問に答えてあなたの悪魔狂信者タイプを診断。図鑑コンプリートを目指そう！">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="header-icon" id="header-brand-icon">🩸</span>
+          <div>
+            <h1 class="header-title" id="header-title">
+              <span id="header-title-text">悪魔狂信者タイプ診断</span>
+            </h1>
+            <p class="header-subtitle">深淵の問いに答え、己の信仰と狂気の形を知れ</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ナビゲーションバー -->
+      <nav class="app-nav">
+        <button type="button" class="nav-tab active" id="nav-quiz">
+          <span class="nav-icon" id="tab-icon-quiz">🔮</span>
+          <span class="tab-label">狂信タイプ診断</span>
+        </button>
+        <button type="button" class="nav-tab" id="nav-tuning">
+          <span class="nav-icon" id="tab-icon-tuning">🎛️</span>
+          <span class="tab-label">オリ狂を作ろう</span>
+        </button>
+        <button type="button" class="nav-tab" id="nav-encyclopedia">
+          <span class="nav-icon" id="tab-icon-encyclopedia">📖</span>
+          <span class="tab-label">狂信者図鑑</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="app-main">
+
+      <!-- 1. 狂信タイプ診断画面 -->
+      <section id="screen-quiz" class="screen-section">
+        <div class="quiz-card">
+          <div class="quiz-progress-header">
+            <span class="quiz-step-badge" id="quiz-progress-text">第 1 問 / 全 16 問</span>
+            <span class="quiz-instruction">直感で最も近いものを選んでください</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="quiz-progress-bar" style="width: 7%;"></div>
+          </div>
+
+          <div class="question-body">
+            <div class="question-number" id="quiz-question-no">Q1.</div>
+            <h2 class="question-text" id="quiz-question-text">質問文を読み込み中...</h2>
+          </div>
+
+          <!-- 5段階選択肢 -->
+          <div class="choices-container" id="quiz-choices-container">
+            <!-- JavaScriptで動的生成 -->
+          </div>
+
+          <!-- 前へ・次へ・結果表示ボタン -->
+          <div class="quiz-nav-actions">
+            <button type="button" class="btn btn-secondary" id="btn-prev-question" disabled>
+              ❮ 前の質問
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-next-question">
+              次の質問へ ❯
+            </button>
+            <button type="button" class="btn btn-danger btn-pulse hidden" id="btn-submit-quiz">
+              🩸 結果を判定し図鑑に記録する
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 診断結果画面 -->
+      <section id="screen-result" class="screen-section hidden">
+        <div class="result-card">
+          <div class="result-new-badge hidden" id="result-new-badge">✨ NEW! 図鑑に新登録されました！</div>
+
+          <div class="result-badge-row">
+            <span class="rarity-badge" id="result-rarity">RARITY: SSR [No.01]</span>
+          </div>
+
+          <div class="result-visual-area">
+            <div class="result-avatar" id="result-avatar">👑🩸</div>
+            <h2 class="result-name" id="result-name">深淵の筆頭使徒</h2>
+            <div class="result-subtitle" id="result-subtitle">狂気を纏いし混沌の体現者</div>
+          </div>
+
+          <div class="result-quote-box">
+            <p id="result-quote">「ご覧ください我が主よ……」</p>
+          </div>
+
+          <div class="result-desc-box">
+            <h3 class="result-section-title">【狂信者特性】</h3>
+            <p id="result-description">説明文...</p>
+          </div>
+
+          <div class="result-params-section">
+            <h3 class="result-section-title">【あなたの算出パラメータ】</h3>
+            <div class="result-params-grid" id="result-params-list">
+              <!-- JavaScriptで動的生成 -->
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" class="btn btn-primary" id="btn-go-encyclopedia-from-result">
+              📖 狂信者図鑑で確認する
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-retry-quiz">
+              🔄 はじめから
+            </button>
+            <button type="button" class="btn btn-share" id="btn-share-twitter">
+              𝕏 結果をシェア
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. オリ狂を作ろう (パラメータ自由調整モード) 画面 -->
+      <section id="screen-tuning" class="screen-section hidden">
+        <div class="tuning-intro">
+          <h2>🎛️ オリ狂を作ろう</h2>
+          <p>各パラメータスライダーを自由に動かして、自分だけの狂信者タイプ（オリ狂）を召喚できます。<br>
+          「オリ狂を召喚＆図鑑に記録」を押すと、指定したパラメータに応じたタイプが判定され、図鑑に登録されます。</p>
+        </div>
+
+        <div class="tuning-card">
+          <div id="tuning-sliders-container">
+            <!-- JavaScriptでスライダーを動的生成 -->
+          </div>
+
+          <div class="tuning-action-area">
+            <button type="button" class="btn btn-danger btn-lg btn-pulse" id="btn-submit-tuning">
+              🩸 オリ狂を召喚 ＆ 図鑑に記録
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 狂信者図鑑モード画面 -->
+      <section id="screen-encyclopedia" class="screen-section hidden">
+        <div class="encyclopedia-header">
+          <div class="encyclopedia-title-group">
+            <h2>📖 悪魔狂信者 図鑑</h2>
+            <p>診断や自由調整で発見した狂信者タイプが記録されます。全種類の発見を目指しましょう。</p>
+          </div>
+          
+          <div class="encyclopedia-progress-box">
+            <div class="progress-info-row">
+              <span id="encyclopedia-rate-text">発見状況: 0 / 19 種 (0%)</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill progress-bar-gold" id="encyclopedia-progress-bar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- フィルターボタン -->
+        <div class="encyclopedia-filters">
+          <button type="button" class="encyclopedia-filter-btn active" data-filter="all">すべて</button>
+          <button type="button" class="encyclopedia-filter-btn" data-filter="unlocked">発見済み</button>
+          <button type="button" class="encyclopedia-filter-btn" data-filter="locked">未発見のみ</button>
+        </div>
+
+        <!-- 図鑑グリッド -->
+        <div class="encyclopedia-grid" id="encyclopedia-grid">
+          <!-- JavaScriptで動的生成 -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- モーダル詳細ウィンドウ (図鑑詳細) -->
+    <div id="modal-detail" class="modal-overlay hidden">
+      <div class="modal-content">
+        <button type="button" class="modal-close" id="modal-detail-close">✕</button>
+        <div id="modal-detail-body">
+          <!-- 動的生成 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- リセット確認用カスタムモーダル -->
+    <div id="modal-reset-confirm" class="modal-overlay hidden">
+      <div class="modal-content modal-content-sm modal-content-tap">
+        <div class="modal-reset-body">
+          <p class="modal-reset-text">
+            すべてを終わらせる？<br>
+            <span class="modal-reset-subtext">(「うなずく」と図鑑データが完全に削除されます。)</span>
+          </p>
+          <div class="modal-reset-actions">
+            <button type="button" class="btn btn-danger common-frame-border" id="btn-reset-confirm">うなずく</button>
+          </div>
+          <div class="modal-reset-actions">
+            <button type="button" class="btn btn-secondary common-frame-border" id="btn-reset-cancel">・・・</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- トースト通知コンテナ -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- フッター -->
+    <footer class="app-footer">
+      <div class="tap-reset-wrapper">
+        <button type="button" class="btn-tap-reset" id="btn-tap-reset" title="TAP!">
+          TAP！
+        </button>
+      </div>
+      <p>© 2026 悪魔狂信者タイプ診断 | 個人制作・二次創作Webゲーム</p>
+      <p class="footer-sub">診断方式: 係数足し引き加算 & 5段階丸め込み条件判定</p>
+    </footer>
+  </div>
+
+  <!-- 全画面フェード演出用オーバーレイ (赤・黒フェード) -->
+  <div id="screen-fade-overlay" class="screen-fade-overlay hidden"></div>
+
+  <!-- スクリプト読み込み順序 -->
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
