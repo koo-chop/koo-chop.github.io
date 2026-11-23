@@ -19,18 +19,18 @@ const UI_ASSETS = {
   tabs: {
     quiz: {
       icon: "",          // タブタイトルの横のアイコン画像 (例: "assets/images/tab_quiz_icon.png")
-      buttonImg: "",      // タブボタン全体を画像にする場合 (例: "assets/images/tab_btn_quiz.png")
-      buttonHoverImg: ""  // タブボタンのホバー時画像
+      buttonImg: "assets/button/test_tab.png",      // タブボタン全体を画像にする場合 (例: "assets/images/tab_btn_quiz.png")
+      buttonHoverImg: "assets/button/test_tab_hover.png"  // タブボタンのホバー時画像
     },
     tuning: {
       icon: "",          // 例: "assets/images/tab_tuning_icon.png"
-      buttonImg: "",
-      buttonHoverImg: ""
+      buttonImg: "assets/button/test_tab.png",
+      buttonHoverImg: "assets/button/test_tab_hover.png"
     },
     encyclopedia: {
       icon: "",          // 例: "assets/images/tab_encyclopedia_icon.png"
-      buttonImg: "",
-      buttonHoverImg: ""
+      buttonImg: "assets/button/test_tab.png",
+      buttonHoverImg: "assets/button/test_tab_hover.png"
     }
   },
 
@@ -60,16 +60,22 @@ const UI_ASSETS = {
     tapReset: {
       defaultImg: "assets/button/TAP.png",     // 例: "assets/images/btn_tap_reset.png"
       hoverImg: "assets/button/TAP_hover.png"
+    },
+    // ヘッダー: インフォメーションボタン
+    headerInfo: {
+      defaultImg: "",     // 例: "assets/button/info.png"
+      hoverImg: ""        // 例: "assets/button/info_hover.png"
     }
   },
 
   // ★狂信タイプ診断の選択肢 ＆ TAP確認モーダルボタン（うなずく／・・・）共通のボーダー画像設定 (border-image)
   choiceBorderImage: {
-    source: "assets/button/option.png", // ボーダー画像パス（例: "assets/images/frame_border.png"）
-    slice: "39",                              // スライスの設定（例: 16 または "16 fill"）
-    width: "37px",                             // 枠線の太さ（例: "8px" または 8）
-    repeat: "round",                          // repeat | round | stretch
-    outset: "17px"                               // アウトセット
+    source: "assets/button/option.png",          // 通常時ボーダー画像パス
+    hoverSource: "assets/button/option_selected.png", // ホバー時・選択状態時のボーダー画像パス
+    slice: "39",                                 // スライスの設定（例: 16 または "16 fill"）
+    width: "30px",                               // 枠線の太さ（例: "8px" または 8）
+    repeat: "round",                             // repeat | round | stretch
+    outset: "14px"                               // アウトセット
   }
 };
 

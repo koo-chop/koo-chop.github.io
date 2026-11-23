@@ -86,6 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
     btnResetCancel: document.getElementById("btn-reset-cancel"),
     btnResetConfirm: document.getElementById("btn-reset-confirm"),
 
+    // インフォメーションモーダル要素
+    btnHeaderInfo: document.getElementById("btn-header-info"),
+    modalInfo: document.getElementById("modal-info"),
+    modalInfoClose: document.getElementById("modal-info-close"),
+
     // トースト通知 & 全画面フェードオーバーレイ
     toastContainer: document.getElementById("toast-container"),
     fadeOverlay: document.getElementById("screen-fade-overlay"),
@@ -156,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { btn: elements.btnRetryQuiz, cfg: UI_ASSETS.buttons?.retryQuiz },
       { btn: elements.btnGoEncyclopediaFromResult, cfg: UI_ASSETS.buttons?.goEncyclopedia },
       { btn: elements.btnTapReset, cfg: UI_ASSETS.buttons?.tapReset },
+      { btn: elements.btnHeaderInfo, cfg: UI_ASSETS.buttons?.headerInfo },
       { btn: elements.navQuiz, cfg: UI_ASSETS.tabs?.quiz },
       { btn: elements.navTuning, cfg: UI_ASSETS.tabs?.tuning },
       { btn: elements.navEncyclopedia, cfg: UI_ASSETS.tabs?.encyclopedia }
@@ -187,8 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
             imgEl.src = hoverImg;
           });
           btn.addEventListener("mouseleave", () => {
-            // ★重要: is-shivering（モーダル表示中の震え・ホバー維持）中はホバー画像を維持する
-            if (btn.classList.contains("is-shivering")) {
+            // ★重要: is-shivering またはアクティブなナビタブ（現在表示中の画面）はホバー画像を維持する
+            if (btn.classList.contains("is-shivering") || btn.classList.contains("active")) {
               return;
             }
             imgEl.src = defaultImg;
@@ -204,6 +210,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const src = cfg.source.trim();
         const urlVal = src.startsWith("url(") ? src : `url("${src}")`;
         document.documentElement.style.setProperty("--common-border-image-source", urlVal);
+
+        // ホバー時・選択時画像の適用 (hoverSource または selectedSource、未指定時は通常画像)
+        const hoverSrc = (cfg.hoverSource && cfg.hoverSource.trim() !== "")
+          ? cfg.hoverSource.trim()
+          : ((cfg.selectedSource && cfg.selectedSource.trim() !== "") ? cfg.selectedSource.trim() : src);
+        const hoverUrlVal = hoverSrc.startsWith("url(") ? hoverSrc : `url("${hoverSrc}")`;
+        document.documentElement.style.setProperty("--common-border-image-hover-source", hoverUrlVal);
+
+        // ホバー・選択画像をプリロードして切り替え遅延・チラつきを防止
+        if (hoverSrc) {
+          const preloadBorderHover = new Image();
+          preloadBorderHover.src = hoverSrc.replace(/^url\(["']?/, "").replace(/["']?\)$/, "");
+        }
 
         if (cfg.slice !== undefined && cfg.slice !== null) {
           document.documentElement.style.setProperty("--common-border-image-slice", String(cfg.slice));
@@ -221,6 +240,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
+
+    // 5. ナビゲーションバーのタブ画像のアクティブ状態を同期
+    updateNavTabImages();
   }
 
   // ==========================================
@@ -251,6 +273,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
+  // ナビゲーションタブの画像状態同期
+  // 現在表示中の画面（active）またはホバー時はホバー画像を表示
+  // ==========================================
+  function updateNavTabImages() {
+    if (typeof UI_ASSETS === "undefined" || !UI_ASSETS.tabs) return;
+
+    const navTabs = [
+      { tab: elements.navQuiz, cfg: UI_ASSETS.tabs.quiz },
+      { tab: elements.navTuning, cfg: UI_ASSETS.tabs.tuning },
+      { tab: elements.navEncyclopedia, cfg: UI_ASSETS.tabs.encyclopedia }
+    ];
+
+    navTabs.forEach(({ tab, cfg }) => {
+      if (!tab || !cfg) return;
+      const imgEl = tab.querySelector(".btn-img-asset");
+      if (!imgEl) return;
+
+      const defaultImg = cfg.defaultImg || cfg.buttonImg;
+      const hoverImg = cfg.hoverImg || cfg.buttonHoverImg;
+
+      if (tab.classList.contains("active") || tab.matches(":hover")) {
+        if (hoverImg && hoverImg.trim() !== "") {
+          imgEl.src = hoverImg;
+        }
+      } else {
+        if (defaultImg && defaultImg.trim() !== "") {
+          imgEl.src = defaultImg;
+        }
+      }
+    });
+  }
+
+  // ==========================================
   // 画面遷移
   // ==========================================
   function switchScreen(screenName) {
@@ -262,6 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (screenName === "quiz" && elements.navQuiz) elements.navQuiz.classList.add("active");
     if (screenName === "tuning" && elements.navTuning) elements.navTuning.classList.add("active");
     if (screenName === "encyclopedia" && elements.navEncyclopedia) elements.navEncyclopedia.classList.add("active");
+
+    // ナビゲーションバーのタブ画像をアクティブ状態に合わせて更新
+    updateNavTabImages();
 
     Object.keys(elements.screens).forEach(key => {
       const screen = elements.screens[key];
@@ -447,6 +505,29 @@ document.addEventListener("DOMContentLoaded", () => {
     if (elements.modalDetail) {
       elements.modalDetail.addEventListener("click", (e) => {
         if (e.target === elements.modalDetail) closeModal();
+      });
+    }
+
+    // インフォメーションモーダル開閉
+    function closeInfoModal() {
+      if (elements.modalInfo) {
+        elements.modalInfo.classList.add("hidden");
+      }
+    }
+
+    if (elements.btnHeaderInfo) {
+      elements.btnHeaderInfo.addEventListener("click", () => {
+        if (elements.modalInfo) {
+          elements.modalInfo.classList.remove("hidden");
+        }
+      });
+    }
+    if (elements.modalInfoClose) {
+      elements.modalInfoClose.addEventListener("click", closeInfoModal);
+    }
+    if (elements.modalInfo) {
+      elements.modalInfo.addEventListener("click", (e) => {
+        if (e.target === elements.modalInfo) closeInfoModal();
       });
     }
   }
